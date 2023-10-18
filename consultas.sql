@@ -53,7 +53,7 @@ WHERE reparto LIKE '%Actor/Actriz%';
 
 --7. Ver solo la categoría "películas". Mostrar el título en mayúscula, el género (en mayúscula), los tags (separados por coma en la misma columna, usando concat o group_concat), duración y el enlace al trailer.
 
-SELECT UCASE(T.titulo) as Película, UCASE(G.nombre) as Genero , T.resumen, T.temporadas, T.trailer, GROUP_CONCAT(D.nombre) as Tags 
+SELECT UCASE(T.titulo) as Película, UCASE(G.nombre) as Genero , T.resumen, T.duracion, T.trailer, GROUP_CONCAT(D.nombre) as Tags 
 FROM `titulos` T 
 JOIN `idgenero` G 
 ON T.id_genero = G.id 
@@ -92,14 +92,40 @@ SELECT titulo, temporadas FROM `titulos`
 WHERE id_categoria = (SELECT id FROM idcategorias WHERE nombre = 'Serie')
 ORDER BY temporadas DESC;
 
+
+--13. Agregar el campo "Fecha de lanzamiento" a la tabla de trabajos fílmicos como tipo Date y realizar la actualización con las fechas de películas/series del género "Aventura".
+
+
 -- 14. Buscar películas por palabra clave. Realizar una consulta que permita a los usuarios buscar películas utilizando palabras clave en el título o la descripción
  SELECT * FROM `titulos` 
  WHERE id_categoria = (SELECT id FROM idcategorias WHERE nombre = 'Película')
  AND titulo LIKE 'Ju%';
 
-
---13. Agregar el campo "Fecha de lanzamiento" a la tabla de trabajos fílmicos como tipo Date y realizar la actualización con las fechas de películas/series del género "Aventura".
-
-
-
 --15. Sumar la tabla "Ranking" que incluye el ID de la película/serie, calificación y comentarios. Utilizar operaciones SQL como joins, unions, concat, count, group by, etc
+
+  --Muestra la clasificación de las peliculas con sus comentarios.
+
+ SELECT T.titulo, R.clasificación, R.comentarios 
+ FROM `ranking` R
+ JOIN  `titulos`  T
+ ON R.idtitulo = T.id
+ WHERE T.id_categoria = (SELECT id FROM idcategorias WHERE nombre = 'Película');
+ GROUP BY T.titulo;
+
+ --Muestra la clasificación de las series con sus comentarios.
+
+ SELECT T.titulo, R.clasificación, R.comentarios 
+ FROM `ranking` R
+ JOIN  `titulos`  T
+ ON R.idtitulo = T.id
+ WHERE T.id_categoria = (SELECT id FROM idcategorias WHERE nombre = 'Serie')
+ GROUP BY T.titulo;
+
+ --Muestra la clasificación de las peliculas con clasificacion mayor a 7.
+
+SELECT T.titulo, R.clasificación
+ FROM `ranking` R
+ JOIN  `titulos`  T
+ ON R.idtitulo = T.id
+ WHERE T.id_categoria = (SELECT id FROM idcategorias WHERE nombre = 'Película') and R.clasificación >7
+ GROUP BY T.titulo;

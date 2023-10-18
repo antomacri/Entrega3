@@ -35,3 +35,12 @@ CREATE TABLE `titulos_tags` (
 ALTER TABLE `titulos_tags`
   ADD CONSTRAINT `titulos_tags_ibfk_1` FOREIGN KEY (`idtitulo`) REFERENCES `titulos` (`id`),
   ADD CONSTRAINT `titulos_tags_ibfk_2` FOREIGN KEY (`idTag`) REFERENCES `tags` (`id`);
+
+CREATE TABLE `Ranking` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `idtitulo` int(11) DEFAULT NULL,
+  `clasificación` int(10) NOT NULL,
+  `comentarios` varchar(300),
+  FOREIGN KEY (idtitulo) REFERENCES titulos(id),
+
+ );
