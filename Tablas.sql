@@ -1,56 +1,37 @@
-CREATE DATABASE trailerflix;
-USE trailerflix;
-CREATE TABLE idGenero (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(255) NOT NULL
-);
-CREATE TABLE idCategorias (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(255) NOT NULL
+CREATE TABLE `idgenero` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(255) NOT NULL
 );
 
-CREATE TABLE Peliculas (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    titulo VARCHAR(255) NOT NULL,
-    resumen TEXT,
-    anio_estreno INT,
-    duracion INT,
-    id_genero INT,
-    id_categoria INT,
-    FOREIGN KEY (id_genero) REFERENCES Genero(id),
-    FOREIGN KEY (id_categoria) REFERENCES Categorias(id)
+CREATE TABLE `idcategorias` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(255) NOT NULL
 );
 
-CREATE TABLE Pelicula_Tags (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    idPelicula INT,
-    idTag INT,
-    FOREIGN KEY (idPelicula) REFERENCES Peliculas(id),
-    FOREIGN KEY (idTag) REFERENCES Tags(id)
+CREATE TABLE `tags` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(255) NOT NULL
+)
+
+CREATE TABLE `titulos` (
+  `id` int(11) NOT NULL,
+  `titulo` varchar(255) NOT NULL,
+  `id_categoria` int(11) DEFAULT NULL,
+  `id_tags` int(11) DEFAULT NULL,
+  `id_genero` int(11) DEFAULT NULL,
+  `resumen` text DEFAULT NULL,
+  `temporadas` int(11) DEFAULT NULL,
+  `reparto` text DEFAULT NULL,
+  `trailer` text DEFAULT NULL,
+  `duracion` int(11) DEFAULT NULL
 );
 
-CREATE TABLE Series (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    titulo VARCHAR(255) NOT NULL,
-    resumen TEXT,
-    año_estreno INT,
-    temporadas INT,
-    id_genero INT,
-    id_categoria INT,
-    reparto TEXT,
-    trailer VARCHAR(255),
-    FOREIGN KEY (id_genero) REFERENCES Genero(id),
-    FOREIGN KEY (id_categoria) REFERENCES Categorias(id)
+CREATE TABLE `titulos_tags` (
+  `id` int(11) NOT NULL,
+  `idtitulo` int(11) DEFAULT NULL,
+  `idTag` int(11) DEFAULT NULL
 );
 
-CREATE TABLE Temporadas (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    numero_temporada INT NOT NULL,
-    id_serie INT,
-    FOREIGN KEY (id_serie) REFERENCES Series(id)
-);
-
-CREATE TABLE Tags (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(255) NOT NULL
-);
+ALTER TABLE `titulos_tags`
+  ADD CONSTRAINT `titulos_tags_ibfk_1` FOREIGN KEY (`idtitulo`) REFERENCES `titulos` (`id`),
+  ADD CONSTRAINT `titulos_tags_ibfk_2` FOREIGN KEY (`idTag`) REFERENCES `tags` (`id`);
